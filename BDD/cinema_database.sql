@@ -2,61 +2,61 @@
 CREATE DATABASE IF NOT EXISTS CINEMA_DATABASE;
 
 -- FONCTIONS UTILITAIRES DE SUPPRESSION
-DROP TABLE IF EXISTS utilisateurs;
-DROP TABLE IF EXISTS statuts;
-DROP TABLE IF EXISTS utilisateurs_statuts;
-DROP TABLE IF EXISTS seances;
-DROP TABLE IF EXISTS salles;
+DROP TABLE IF EXISTS users
+DROP TABLE IF EXISTS status;
+DROP TABLE IF EXISTS users_status;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS types;
 DROP TABLE IF EXISTS films;
 DROP TABLE IF EXISTS types_films;
 
--- CREATION DE LA TABLE UTILISATEURS
-CREATE TABLE IF NOT EXISTS utilisateurs(
+-- CREATION DE LA TABLE USERS
+CREATE TABLE IF NOT EXISTS users(
   id int NOT NULL AUTO_INCREMENT,
   mail varchar(255)  NOT NULL,
-  mdp varchar(255)  NOT NULL,
-  nom varchar(255)  NOT NULL,
-  prenom varchar(255)  NOT NULL,
-  date_de_naissance date  NOT NULL,
-  adresse varchar(255),
+  password varchar(255)  NOT NULL,
+  firstname varchar(255)  NOT NULL,
+  lastname varchar(255)  NOT NULL,
+  birthday date  NOT NULL,
+  address varchar(255),
   PRIMARY KEY (id)
 );
 
 
--- CREATION DE LA TABLE STATUTS
-CREATE TABLE IF NOT EXISTS statuts(
+-- CREATION DE LA TABLE STATUS
+CREATE TABLE IF NOT EXISTS status(
   id TINYINT NOT NULL AUTO_INCREMENT,
-  titre varchar(255) NOT NULL,
+  title varchar(255) NOT NULL,
   PRIMARY KEY (id)
  );
 
 
--- CREATION DE LA TABLE UTILISATEURS STATUTS
-CREATE TABLE IF NOT EXISTS utilisateurs_statuts(
- statuts_id TINYINT NOT NULL,
-  utilisateurs_id int NOT NULL,
-  PRIMARY KEY (statuts_id,utilisateurs_id)
+-- CREATION DE LA TABLE UTILISATEURS STATUS
+CREATE TABLE IF NOT EXISTS users_status(
+ status_id TINYINT NOT NULL,
+  users_id int NOT NULL,
+  PRIMARY KEY (status_id,users_id)
 );
 
 
--- CREATION DES DEUX CLES ETRANGERES DE UTILISATEURS_STATUTS
-ALTER TABLE utilisateurs_statuts
-ADD CONSTRAINT fk_statuts_id 
-FOREIGN KEY (statuts_id) REFERENCES statuts(id);
+-- CREATION DES DEUX CLES ETRANGERES DE USERS_STATUS
+ALTER TABLE users_status
+ADD CONSTRAINT fk_status_id 
+FOREIGN KEY (status_id) REFERENCES status(id);
 
-ALTER TABLE utilisateurs_statuts
-ADD CONSTRAINT fk_utilisateurs_id 
-FOREIGN KEY (utilisateurs_id) REFERENCES utilisateurs(id);
+ALTER TABLE users_status
+ADD CONSTRAINT fk_users_id 
+FOREIGN KEY (users_id) REFERENCES users(id);
 
 
--- CREATION DE LA TABLE SALLES
-CREATE TABLE IF NOT EXISTS salles(
+-- CREATION DE LA TABLE ROOM
+CREATE TABLE IF NOT EXISTS rooms(
   id tinyint NOT NULL AUTO_INCREMENT,
-  nom varchar(255) NOT NULL,
-  nbr_siege smallint NOT NULL,
-  capacite_max varchar(255) NOT NULL,
-  systeme_audio varchar(255) DEFAULT 'Dolby Surround',
+  name varchar(255) NOT NULL,
+  sit_number smallint NOT NULL,
+  max_capacity varchar(255) NOT NULL,
+  audio_system varchar(255) DEFAULT 'Dolby Surround',
   PRIMARY KEY (id)
 );
 
@@ -64,50 +64,50 @@ CREATE TABLE IF NOT EXISTS salles(
 -- CREATION DE LA TABLE RESERVATIONS
 CREATE TABLE IF NOT EXISTS reservations(
 reservations_id int NOT NULL AUTO_INCREMENT,
-  nom varchar(255) NOT NULL,
-  tarif decimal(5,2) NOT NULL,
-  seances_id int NOT NULL,
-  utilisateurs_id int NOT NULL,
+  name varchar(255) NOT NULL,
+  price decimal(5,2) NOT NULL,
+  sessions_id int NOT NULL,
+  users_id int NOT NULL,
   PRIMARY KEY (reservations_id)
  );
 
 
 -- CREATION DES DEUX CLES ETRANGERES DE LA TABLE RESERVATIONS
 ALTER TABLE reservations 
-ADD CONSTRAINT fk_seances_id
-FOREIGN KEY (seances_id) REFERENCES seances(id);
+ADD CONSTRAINT fk_sessions_id
+FOREIGN KEY (sessions_id) REFERENCES sessions(id);
 
 ALTER TABLE reservations 
-ADD CONSTRAINT fk_utilisateurs_reservations_id
-FOREIGN KEY (utilisateurs_id) REFERENCES utilisateurs(id);
+ADD CONSTRAINT fk_users_reservations_id
+FOREIGN KEY (users_id) REFERENCES users(id);
 
 
--- CREATION DE LA TABLE SEANCES
-CREATE TABLE IF NOT EXISTS seances(
+-- CREATION DE LA TABLE SESSIONS
+CREATE TABLE IF NOT EXISTS sessions(
 id int NOT NULL AUTO_INCREMENT,
-  date_heure DATETIME NOT NULL,
+  date_time DATETIME NOT NULL,
   films_id mediumint NOT NULL,
-  salles_id TINYINT NOT NULL,
+  sessions_id TINYINT NOT NULL,
   PRIMARY KEY (id)
  );
 
--- CREATION DES DEUX CLES ETRANGERES DE LA TABLE SEANCES
-ALTER TABLE seances 
-ADD CONSTRAINT fk_films_seances_id
+-- CREATION DES DEUX CLES ETRANGERES DE LA TABLE SESSIONS
+ALTER TABLE sessions 
+ADD CONSTRAINT fk_films_sessions_id
 FOREIGN KEY (films_id) REFERENCES films(id);
 
 ALTER TABLE seances 
-ADD CONSTRAINT fk_salles_seances_id
-FOREIGN KEY (salles_id) REFERENCES salles(id);
+ADD CONSTRAINT fk_rooms_sessions_id
+FOREIGN KEY (rooms_id) REFERENCES rooms(id);
 
 
 -- CREATION DE LA TABLE FILMS
 CREATE TABLE IF NOT EXISTS films (
 id mediumint NOT NULL AUTO_INCREMENT,
-  nom varchar(255) NOT NULL,
-  duree smallint NOT NULL,
-  version_film varchar(255) NOT NULL,
-  affiche varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  duration smallint NOT NULL,
+  film_version varchar(255) NOT NULL,
+  display varchar(255) NOT NULL,
   PRIMARY KEY (id)
 );
 
